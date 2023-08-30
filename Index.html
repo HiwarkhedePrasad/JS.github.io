@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+
+    *{
+      box-sizing: border-box;
+      margin: 0 0 0 0;
+      padding: 0 0 0 0;
+    }
+    button{
+      width: 250px;
+    }
+    h2{
+      text-align: center;
+      text-shadow: 3px;
+      color: purple;
+      background-color: red;
+      font-size: 120px;
+    }
+    h2 span{
+      color: yellow;
+    }
+    .menu ul {
+      list-style: none;
+    }
+    
+
+  button {
+    width: 250px;
+  }
+
+  h2 {
+    text-align: center;
+    text-shadow: 3px;
+    color: rgb(143, 143, 143);
+    background-color: rgba(255, 255, 255, 0);
+    font-size: 120px;
+  }
+
+  h2 span {
+    color: rgb(0, 0, 0);
+  }
+
+  .menu ul {
+    list-style: none;
+  }
+
+  .menu button {
+    margin-top: 15px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .menu button:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .main{
+    display: none;
+  }
+    .main button{
+      margin-top: 15px;
+      border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    background: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .main button:hover{
+      transform: translateY(-10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .main {
+      width: 250px;
+      display: none;
+    }
+
+    .container{
+      display: flex;
+    }
+
+
+    .final {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+
+  .final h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .final p {
+    font-family: monospace;
+    font-size: 16px;
+    color: #555;
+    white-space: pre-wrap;
+    margin: 0;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+ 
+  .final p.comment {
+    color: #999;
+    font-style: italic;
+  }
+.about{
+  float: right;
+  width:100px;
+}
+
+
+@media (max-width: 600px) {
+  
+ 
+    h2 {
+  font-size: 36px; 
+  white-space: nowrap; 
+    overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.box {
+  
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start; 
+}
+.box3 {
+  
+  margin-top: 15px; 
+}
+
+
+.container {
+  display: flex;
+  justify-content: space-between; 
+}
+
+.menu {
+  align-self: flex-start; 
+
+
+  .menu ul {
+    text-align: center; 
+  }
+
+  .menu button {
+    margin: 10px auto; 
+  }
+
+  .main {
+    width: 100%; 
+    display: block; 
+  }
+
+  
+}
+
+
+  </style>
+</head>
+<body>
+  <h2><span><</span>Syntax Visualizer<span id="aboutme">></span></h2>
+ 
+  <div class="container">
+    <div class="menu">
+      <ul>
+        <li><button id="loopbtn">LOOP STATEMENT</button></li>
+        <li><button id="conditionbtn">CONDITION STATEMENT</button></li>
+        <li><button id="breakbtn">BREAK &amp; CONTINUE</button></li>
+        <li><button id="arraybtn">ARRAY</button></li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <div class="loop main" id="loop">
+        <button class="for" id="for">FOR LOOP</button>
+        <button class="for_in" id="for_in">FOR IN LOOP</button>
+        <button class="while" id="while">WHILE LOOP</button>
+        <button class="do_while" id="do_while">DO WHILE LOOP</button>
+      </div>
+
+      <div class="condition main" id="condition">
+        <button class="if" id="if">IF STATEMENT</button>
+        <button class="ifelse" id="ifelse">IF ELSE STATEMENT</button>
+        <button class="elseif" id="elseif">ELSE IF STATEMENT</button>
+        <button class="nestedifelse" id="nestedifelse">NESTED IF ELSE</button>
+        <button class="switch" id="switch">SWITCH CASE STATEMENT</button>
+      </div>
+
+      <div class="break main" id="break">
+        <button class="break" id="break_btn">BREAK</button>
+        <button class="continue" id="continue">CONTINUE</button>
+      </div>
+
+      <div class="array main" id="array">
+        <button class="byarrayliteral" id="byarrayliterabtn">BY ARRAY LITERAL</button>
+        <button class="instanceofarray" id="instanceofarraybtn">CREATING AN INSTANCE OF ARRAY</button>
+      </div>
+    </div>
+
+    <div class="box3" id="box3">
+
+    </div>
+
+    
+      
+      <div class="for_syntax final" id="for_syntax">
+        <h3>FOR Loop Syntax</h3><br>
+        <p>
+          for (expression 1; expression 2; expression 3) { <br>
+            // code block to be executed <br>
+          }
+        </p>
+      </div>
+
+      <div class="for_in_syntax final" id="for_in_syntax">
+        <h3>FOR IN Loop Syntax</h3><br>
+        <p>
+          for (key in object) {      <br>
+            // code block to be executed     <br>
+          }
+        </p>
+      </div>
+
+      <div class="while_syntax final" id="while_syntax">
+        <h3>WHILE Loop Syntax</h3><br>
+        <p>
+          while (condition) {      <br>
+            // code block to be executed        <br>
+          }
+        </p>
+      </div>
+
+      <div class="do_while_syntax final" id="do_while_syntax">
+        <h3>DO WHILE Loop Syntax</h3><br>
+        <p>
+            do {<br>
+                // code block to be executed<br>
+            } while (condition);<br>
+        </p>
+      </div>
+     
+     
+        <div class="if_syntax final" id="if_syntax">
+           <h3>IF Syntax</h3><br>
+           <p>
+            if(condition)<br>
+            {<br>
+              //code block to be executed if condition is true<br>
+            }<br>
+           </p>
+        </div>
+
+        <div class="if_else_syntax final" id="if_else_syntax">
+           <h3>IF ELSE Syntax</h3><br>
+           <p>
+            if(condition)<br>
+            {<br>
+              //code block to be executed if condition is true<br>
+            }<br>
+            else{<br>
+              //code block to be executed if the condition is false<br>
+            }
+           </p>
+        </div>
+
+        <div class="else_if_syntax final" id="else_if_syntax">
+
+          <h3>ELSE IF Synatx</h3><br>
+          <p>
+             if(condition)<br>
+             {<br>
+               //code block to be executed if condition is true<br>
+             }<br>
+             else if(condition 2)<br>
+             {<br>
+               //code block to be executed if condition 2 is true<br>
+             }<br>
+              else<br>
+             {<br>
+               //code block to be executed if the condition is false<br>
+             }
+        </p>
+        </div>
+
+        <div class="nested_syntax final" id="nested_syntax">
+           <h3>NESTED IF ELSE Syntax</h3><br>
+           <p>
+            if(first condition){<br>
+              // This code block executes when the first condition evaluates to true or equivalent result and // then it goes for checking the second condition in the nested loop<br>
+              if(second condition){<br>
+              // This code block executes when the second condition<br>
+              // evaluates to true or equivalent result<br>
+              }else{<br>
+              // This code block executes when the second condition<br>
+              // evaluates to false or equivalent result<br>
+              }<br>
+              }else{<br>
+              // This code block executes when the first condition evaluates to a true or equivalent result<br>
+              }
+           </p>
+        </div>
+
+        <div class="switch_synatx final" id="switch_synatx">
+          <h3>SWITCH CASE STATEMENT Syntax</h3><br>
+          <p><br>
+            switch(expression) {<br>
+              case x:<br>
+                // code block<br>
+                break;<br>
+              case y:<br>
+                // code block<br>
+                break;<br>
+              default:<br>
+                // code block<br>
+            }
+          </p>
+        </div>
+
+        <div class="break final" id="break_sec">
+          <h3>BREAK  STATEMENT</h3><br>
+          <p>
+            In JavaScript, the break statement is used within loops and switch statements to control the flow of the program.<br> It is primarily used to exit or terminate the current loop or switch block prematurely.<br>
+
+                Here's a detailed description of the break statement:<br>
+<br>
+                Inside Loops:<br>
+
+When used within a loop (such as for, while, or do...while), the break statement immediately terminates the loop's execution, regardless of whether the loop's <br>condition has been satisfied or not.
+It is often used when a certain condition is met, and you want to <br>stop the loop from continuing further iterations.<br><br>
+Inside Switch Statements:<br>
+
+In a switch statement, each case represents a different possible value for the given expression. <br>After executing a case block, if you want to exit the switch statement instead of falling through to the next case, you can use the break statement.
+If the break statement is encountered inside a case, the control will immediately exit the switch statement, <br>and the program execution will continue after the switch block.
+          </p>
+
+          <p class="syntax">
+            <h4>SYNTAX</h4><br>
+            break;<br>
+          </p>
+        </div>
+
+        <div class="continue final" id="continue_sec">
+          <h3>CONTINUE STSTEMENT</h3><br>
+          <p>The continue statement breaks one iteration (in the loop) if a specified condition occurs, and continues with the next iteration in the loop.
+
+            The difference between continue and the break statement, <br>is instead of "jumping out" of a loop, the continue statement "jumps over" one iteration in the loop.
+            
+            However, when the continue statement is executed, it behaves differently for different <br>types of loops:
+            
+            In a while loop, the condition is tested, and if it is true, the loop is executed again<br>
+            In a for loop, the increment expression (e.g. i++) is first evaluated, and then the condition is tested to find out if another iteration should be done</p><br>
+
+            <p class="syntax">
+              <h4>SYNTAX</h4><br>
+              continue;<br>
+            </p>
+        </div>
+     
+        <div class="instanceofarray_syntax final" id="instanceofarray_syntax">
+            <h3>INSTANCE OF ARRAY Syntax</h3><br>
+            <p>
+             var arrayname = new array();<br>
+            </p>
+        </div>
+
+        <div class="byarrayliteral_syntax final" id="byarrayliteral_syntax">
+          <h3>BY ARRAY LITERAL Syntax</h3><br>
+          <p>
+            var arrayname = [value1,value2,value3.......valueN];<br>
+          </p>
+        </div>
+    
+  </div>
+</body>
+<script>
+const syntax = document.getElementById('box3');
+
+  const loopbtn = document.getElementById('loopbtn');
+  const arraybtn = document.getElementById('arraybtn');
+  const conditionbtn = document.getElementById('conditionbtn');
+  const breakbtn = document.getElementById('breakbtn');
+  
+  const loopSection = document.getElementById('loop');
+  const arraySection = document.getElementById('array');
+  const conditionSection = document.getElementById('condition');
+  const breakSection = document.getElementById('break');
+
+  const forbtn = document.getElementById('for');
+  const for_inbtn = document.getElementById('for_in');
+  const whilebtn = document.getElementById('while');
+  const do_whilebtn = document.getElementById('do_while');
+
+  const forsection = document.getElementById('for_syntax');
+  const for_insection = document.getElementById('for_in_syntax');
+  const whilesection = document.getElementById('while_syntax');
+  const do_whilesection = document.getElementById('do_while_syntax');
+
+
+  const ifbtn = document.getElementById('if');
+  const ifelsebtn = document.getElementById('ifelse');
+  const elseifbtn = document.getElementById('elseif');
+  const nestedifelsebtn = document.getElementById('nestedifelse');
+  const switchbtn = document.getElementById('switch');
+
+  const ifsection = document.getElementById('if_syntax');
+  const ifelsesection = document.getElementById('if_else_syntax');
+  const elseifsection = document.getElementById('else_if_syntax');
+  const nestedifelsesection = document.getElementById('nested_syntax');
+  const switchsection = document.getElementById('switch_synatx');
+ 
+  const break_btn = document.getElementById('break_btn');
+  const continue_btn = document.getElementById('continue');
+
+  const break_section = document.getElementById('break_sec');
+  const continue_section = document.getElementById('continue_sec')
+
+
+  const instanceofarraybtn = document.getElementById('instanceofarraybtn');
+  const byarrayliterabtn = document.getElementById('byarrayliterabtn');
+
+  const instance_sec = document.getElementById('instanceofarray_syntax');
+  const byarrayliteral_sec = document.getElementById('byarrayliteral_syntax');
+
+  hideAllSections();
+
+  loopbtn.addEventListener('click', () => {
+    loopSection.style.display = 'block';
+    arraySection.style.display = 'none';
+    conditionSection.style.display = 'none';
+    breakSection.style.display = 'none';
+
+  });
+
+  arraybtn.addEventListener('click', () => {
+    loopSection.style.display = 'none';
+    arraySection.style.display = 'block';
+    conditionSection.style.display = 'none';
+    breakSection.style.display = 'none';
+  });
+
+  conditionbtn.addEventListener('click', () => {
+    loopSection.style.display = 'none';
+    arraySection.style.display = 'none';
+    conditionSection.style.display = 'block';
+    breakSection.style.display = 'none';
+
+    
+  });
+
+  breakbtn.addEventListener('click', () => {
+    loopSection.style.display = 'none';
+    arraySection.style.display = 'none';
+    conditionSection.style.display = 'none';
+    breakSection.style.display = 'block';
+  });
+
+  forbtn.addEventListener('click', () => {
+    hideAllSections();
+    forsection.style.display = 'block';
+    syntax.appendChild(forsection);
+  });
+
+  for_inbtn.addEventListener('click', () => {
+    hideAllSections();
+    for_insection.style.display = 'block';
+    syntax.appendChild(for_insection);
+  });
+
+  whilebtn.addEventListener('click', () => {
+    hideAllSections();
+    whilesection.style.display = 'block';
+    syntax.appendChild(whilesection);
+  });
+
+  do_whilebtn.addEventListener('click', () => {
+    hideAllSections();
+    do_whilesection.style.display = 'block';
+    syntax.appendChild(do_whilesection);
+  });
+
+  ifbtn.addEventListener('click', () => {
+    hideAllSections();
+    ifsection.style.display = 'block';
+    syntax.appendChild(ifsection);
+  });
+
+  ifelsebtn.addEventListener('click', () => {
+    hideAllSections();
+    ifelsesection.style.display = 'block';
+    syntax.appendChild(ifelsesection);
+  });
+
+  elseifbtn.addEventListener('click', () => {
+    hideAllSections();
+    elseifsection.style.display = 'block';
+    syntax.appendChild(elseifsection);
+  });
+ 
+  nestedifelsebtn.addEventListener('click', () => {
+    hideAllSections();
+    nestedifelsesection.style.display = 'block';
+    syntax.appendChild(nestedifelsesection);
+  });
+ 
+  switchbtn.addEventListener('click', () => {
+    hideAllSections();
+    switchsection.style.display = 'block';
+    syntax.appendChild(switchsection);
+  });
+  
+  break_btn.addEventListener('click', () => {
+    hideAllSections();
+    break_section.style.display = 'block';
+    syntax.appendChild(break_section);
+  });
+
+  continue_btn.addEventListener('click', () => {
+    hideAllSections();
+    continue_section.style.display = 'block';
+    syntax.appendChild(continue_section);
+  });
+
+  instanceofarraybtn.addEventListener('click', () => {
+    hideAllSections();
+    instance_sec.style.display = 'block';
+    syntax.appendChild(instance_sec);
+  });
+
+  byarrayliterabtn.addEventListener('click', () => {
+    hideAllSections();
+    byarrayliteral_sec.style.display = 'block';
+    syntax.appendChild(byarrayliteral_sec);
+  });
+
+  function hideAllSections() {
+  byarrayliteral_sec.style.display = 'none';
+  instance_sec.style.display = 'none';
+  forsection.style.display = 'none';
+  for_insection.style.display = 'none';
+  whilesection.style.display = 'none';
+  do_whilesection.style.display = 'none';
+  ifsection.style.display = 'none';
+  ifelsesection.style.display = 'none';
+  elseifsection.style.display = 'none';
+  nestedifelsesection.style.display = 'none';
+  switchsection.style.display = 'none';
+  break_section.style.display = 'none';
+  continue_section.style.display = 'none';
+ }
+
+ 
+</script>
+</html>
