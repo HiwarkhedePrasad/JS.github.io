@@ -3,559 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syntax Visualizer - Premium Edition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Syntax Visualizer</title>
+    <link rel="shortcut icon" href="new.webp" type="image/x-icon" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-        
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f5f5f5;
+            --text-color: #333333;
+            --button-bg: #e0e0e0;
+            --button-hover: #cccccc;
+            --accent-color: #007bff;
+            --code-bg: #fafafa;
+        }
+
         * {
-            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        
-        .code-font {
-            font-family: 'JetBrains Mono', monospace;
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
         }
-        
-        .loader-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+
+        header {
+            text-align: center;
+            padding: 20px 10px;
+            background-color: var(--secondary-bg);
+            border-bottom: 2px solid var(--button-bg);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--text-color);
+        }
+
+        header h1 span {
+            color: var(--accent-color);
+        }
+
+        .container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease-out;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .sidebar {
+            background-color: var(--secondary-bg);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-group h3 {
+            margin-bottom: 10px;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--button-bg);
+            padding-bottom: 5px;
+        }
+
+        .menu-group ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .menu-group button {
+            background-color: var(--button-bg);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.2s;
+            flex: 1 1 auto;
+        }
+
+        .menu-group button:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
         }
         
-        .loader {
-            width: 60px;
-            height: 60px;
-            border: 4px solid #e2e8f0;
-            border-top: 4px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .menu-group button.active {
+            background-color: var(--accent-color);
+            color: #fff;
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .content {
+            background-color: var(--secondary-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
-        .premium-gradient {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
-            border: 1px solid #e2e8f0;
+
+        .syntax-block {
+            display: none;
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--button-bg);
         }
-        
-        .premium-shadow {
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+        .syntax-block.active {
+            display: block;
         }
-        
-        .premium-shadow-lg {
-            box-shadow: 0 10px 60px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+        .syntax-block h2 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+            font-size: 1.5rem;
         }
-        
-        .card-hover {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+        .syntax-block pre {
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            font-size: 1rem;
+            margin: 0;
+            padding: 0;
         }
-        
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.1);
+
+        .syntax-block p {
+            margin-bottom: 15px;
         }
-        
-        .btn-premium {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-premium::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-premium:hover::before {
-            left: 100%;
-        }
-        
-        .btn-premium:hover {
-            border-color: #3b82f6;
-            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.15);
-        }
-        
-        .mobile-menu {
-            transform: translateX(-100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-        }
-        
-        .mobile-menu.open {
-            transform: translateX(0);
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .syntax-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        
-        .code-block {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid #334155;
-        }
-        
-        .category-blue { 
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            border-color: #93c5fd;
-            color: #1e40af;
-        }
-        
-        .category-green { 
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-            border-color: #86efac;
-            color: #166534;
-        }
-        
-        .category-yellow { 
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            border-color: #fcd34d;
-            color: #92400e;
-        }
-        
-        .category-purple { 
-            background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
-            border-color: #c084fc;
-            color: #7c3aed;
-        }
-        
-        .premium-header {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .text-gradient {
-            background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .accent-border {
-            border-left: 4px solid #3b82f6;
-        }
-        
-        .premium-input {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid #e2e8f0;
-            backdrop-filter: blur(10px);
-        }
-        
-        .premium-input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+
+        /* Desktop and larger screens */
+        @media (min-width: 768px) {
+            header h1 {
+                font-size: 3.5rem;
+            }
+
+            .container {
+                flex-direction: row;
+                max-width: 1200px;
+                margin: 20px auto;
+            }
+
+            .sidebar {
+                flex: 0 0 300px;
+                position: sticky;
+                top: 20px;
+                align-self: flex-start;
+            }
+
+            .menu-group ul {
+                flex-direction: column;
+            }
+
+            .content {
+                flex: 1;
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-gray-50 via-white to-gray-50 min-h-screen">
-    <!-- Loader -->
-    <div id="loader" class="loader-container">
-        <div class="text-center">
-            <div class="loader mb-6"></div>
-            <div class="text-center">
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Syntax Visualizer</h3>
-                <p class="text-gray-600 font-medium">Premium Edition Loading...</p>
-                <div class="mt-4 flex justify-center">
-                    <div class="flex space-x-1">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style="animation-delay: 0.1s"></div>
-                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
-                    </div>
+<body>
+    <header>
+        <h1><span>&lt;</span>Syntax Visualizer<span>&gt;</span></h1>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar" id="sidebar">
+            <nav>
+                <div class="menu-group">
+                    <h3>Loops</h3>
+                    <ul id="loop-menu">
+                        <li><button data-target="for-syntax">FOR Loop</button></li>
+                        <li><button data-target="for-in-syntax">FOR IN Loop</button></li>
+                        <li><button data-target="while-syntax">WHILE Loop</button></li>
+                        <li><button data-target="do-while-syntax">DO WHILE Loop</button></li>
+                    </ul>
                 </div>
+
+                <div class="menu-group">
+                    <h3>Conditionals</h3>
+                    <ul id="conditional-menu">
+                        <li><button data-target="if-syntax">IF Statement</button></li>
+                        <li><button data-target="if-else-syntax">IF ELSE Statement</button></li>
+                        <li><button data-target="else-if-syntax">ELSE IF Statement</button></li>
+                        <li><button data-target="nested-syntax">NESTED IF ELSE</button></li>
+                        <li><button data-target="switch-syntax">SWITCH CASE</button></li>
+                    </ul>
+                </div>
+
+                <div class="menu-group">
+                    <h3>Control Flow</h3>
+                    <ul id="control-flow-menu">
+                        <li><button data-target="break-sec">BREAK Statement</button></li>
+                        <li><button data-target="continue-sec">CONTINUE Statement</button></li>
+                    </ul>
+                </div>
+
+                <div class="menu-group">
+                    <h3>Arrays</h3>
+                    <ul id="array-menu">
+                        <li><button data-target="instanceofarray-syntax">Instance of Array</button></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="content" id="content">
+            <p>Select a syntax element from the menu to see its structure.</p>
+
+            <div class="syntax-block" id="for-syntax">
+                <h2>FOR Loop Syntax</h2>
+                <pre><code>for (expression 1; expression 2; expression 3) {
+  // code block to be executed
+}</code></pre>
             </div>
-        </div>
+            
+            <div class="syntax-block" id="for-in-syntax">
+                <h2>FOR IN Loop Syntax</h2>
+                <pre><code>for (key in object) {
+  // code block to be executed
+}</code></pre>
+            </div>
+
+            <div class="syntax-block" id="while-syntax">
+                <h2>WHILE Loop Syntax</h2>
+                <pre><code>while (condition) {
+  // code block to be executed
+}</code></pre>
+            </div>
+
+            <div class="syntax-block" id="do-while-syntax">
+                <h2>DO WHILE Loop Syntax</h2>
+                <pre><code>do {
+  // code block to be executed
+} while (condition);</code></pre>
+            </div>
+
+            <div class="syntax-block" id="if-syntax">
+                <h2>IF Syntax</h2>
+                <pre><code>if (condition) {
+  // code block to be executed if condition is true
+}</code></pre>
+            </div>
+
+            <div class="syntax-block" id="if-else-syntax">
+                <h2>IF ELSE Syntax</h2>
+                <pre><code>if (condition) {
+  // code block to be executed if condition is true
+} else {
+  // code block to be executed if the condition is false
+}</code></pre>
+            </div>
+
+            <div class="syntax-block" id="else-if-syntax">
+                <h2>ELSE IF Syntax</h2>
+                <pre><code>if (condition 1) {
+  // code block to be executed if condition 1 is true
+} else if (condition 2) {
+  // code block to be executed if condition 2 is true
+} else {
+  // code block to be executed if all conditions are false
+}</code></pre>
+            </div>
+
+            <div class="syntax-block" id="nested-syntax">
+                <h2>NESTED IF ELSE Syntax</h2>
+                <pre><code>if (firstCondition) {
+  // This code executes when the first condition is true
+  if (secondCondition) {
+    // This code executes when the second condition is also true
+  } else {
+    // This code executes when only the first condition is true
+  }
+} else {
+  // This code executes when the first condition is false
+}</code></pre>
+            </div>
+
+            <div class="syntax-block" id="switch-syntax">
+                <h2>SWITCH CASE Statement Syntax</h2>
+                <pre><code>switch (expression) {
+  case x:
+    // code block
+    break;
+  case y:
+    // code block
+    break;
+  default:
+    // code block
+}</code></pre>
+            </div>
+
+            <div class="syntax-block" id="break-sec">
+                <h2>BREAK Statement</h2>
+                <p>The `break` statement immediately terminates the current loop or switch statement and transfers control to the statement following the terminated statement.</p>
+                <pre><code>break;</code></pre>
+            </div>
+
+            <div class="syntax-block" id="continue-sec">
+                <h2>CONTINUE Statement</h2>
+                <p>The `continue` statement terminates execution of the statements in the current iteration of the current or labeled loop, and continues with the next iteration of the loop.</p>
+                <pre><code>continue;</code></pre>
+            </div>
+
+            <div class="syntax-block" id="instanceofarray-syntax">
+                <h2>Creating an Instance of Array Syntax</h2>
+                <pre><code>var arrayname = new Array();</code></pre>
+            </div>
+            
+        </main>
     </div>
-
-    <!-- Main Content -->
-    <div id="main-content" class="opacity-0 transition-opacity duration-500">
-        <!-- Premium Header -->
-        <header class="premium-header premium-shadow sticky top-0 z-40">
-            <div class="container mx-auto px-4 py-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-code text-white text-xl"></i>
-                        </div>
-                        <div>
-                            <h1 class="text-3xl font-bold text-gradient">Syntax Visualizer</h1>
-                            <p class="text-sm text-gray-500 font-medium">Premium Edition</p>
-                        </div>
-                    </div>
-                    <button id="mobile-menu-btn" class="md:hidden btn-premium p-3 rounded-xl">
-                        <i class="fas fa-bars text-gray-700"></i>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="mobile-menu fixed top-0 left-0 w-full h-full z-50 md:hidden">
-            <div class="flex items-center justify-between p-6 border-b border-gray-200">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-code text-white text-sm"></i>
-                    </div>
-                    <h2 class="text-xl font-bold text-gray-800">Menu</h2>
-                </div>
-                <button id="close-menu" class="btn-premium p-2 rounded-lg">
-                    <i class="fas fa-times text-gray-600"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <div class="space-y-4">
-                    <button class="main-menu-btn w-full text-left p-4 rounded-xl btn-premium category-blue font-semibold transition-all duration-300" data-category="loop">
-                        <i class="fas fa-sync-alt mr-3"></i>Loop Statements
-                    </button>
-                    <button class="main-menu-btn w-full text-left p-4 rounded-xl btn-premium category-green font-semibold transition-all duration-300" data-category="condition">
-                        <i class="fas fa-code-branch mr-3"></i>Condition Statements
-                    </button>
-                    <button class="main-menu-btn w-full text-left p-4 rounded-xl btn-premium category-yellow font-semibold transition-all duration-300" data-category="break">
-                        <i class="fas fa-stop-circle mr-3"></i>Break & Continue
-                    </button>
-                    <button class="main-menu-btn w-full text-left p-4 rounded-xl btn-premium category-purple font-semibold transition-all duration-300" data-category="array">
-                        <i class="fas fa-list mr-3"></i>Arrays
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="container mx-auto px-4 py-8">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <!-- Premium Sidebar -->
-                <div class="lg:col-span-1">
-                    <div class="glass-effect rounded-2xl premium-shadow-lg p-6 sticky top-24">
-                        <div class="text-center mb-8">
-                            <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-                                <i class="fas fa-layer-group text-white text-2xl"></i>
-                            </div>
-                            <h2 class="text-2xl font-bold text-gray-800">Categories</h2>
-                            <p class="text-sm text-gray-500 mt-1">Choose a syntax category</p>
-                        </div>
-                        <div class="hidden md:block space-y-4">
-                            <button class="main-menu-btn w-full text-left p-4 rounded-xl btn-premium category-blue font-semibold card-hover" data-category="loop">
-                                <div class="flex items-center">
-                                    <i class="fas fa-sync-alt mr-3 text-lg"></i>
-                                    <span>Loop Statements</span>
-                                </div>
-                            </button>
-                            <button class="main-menu-btn w-full text-left p-4 rounded-xl btn-premium category-green font-semibold card-hover" data-category="condition">
-                                <div class="flex items-center">
-                                    <i class="fas fa-code-branch mr-3 text-lg"></i>
-                                    <span>Condition Statements</span>
-                                </div>
-                            </button>
-                            <button class="main-menu-btn w-full text-left p-4 rounded-xl btn-premium category-yellow font-semibold card-hover" data-category="break">
-                                <div class="flex items-center">
-                                    <i class="fas fa-stop-circle mr-3 text-lg"></i>
-                                    <span>Break & Continue</span>
-                                </div>
-                            </button>
-                            <button class="main-menu-btn w-full text-left p-4 rounded-xl btn-premium category-purple font-semibold card-hover" data-category="array">
-                                <div class="flex items-center">
-                                    <i class="fas fa-list mr-3 text-lg"></i>
-                                    <span>Arrays</span>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Content Area -->
-                <div class="lg:col-span-3">
-                    <!-- Premium Welcome Message -->
-                    <div id="welcome-message" class="glass-effect rounded-3xl premium-shadow-lg p-8 mb-8 text-center">
-                        <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center">
-                            <i class="fas fa-rocket text-white text-3xl"></i>
-                        </div>
-                        <h2 class="text-4xl font-bold text-gradient mb-4">Welcome to Premium Edition</h2>
-                        <p class="text-xl text-gray-600 mb-6 leading-relaxed">Experience the most elegant way to explore JavaScript syntax patterns with our premium white theme design</p>
-                        <div class="flex justify-center">
-                            <div class="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full">
-                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                                <span class="text-blue-700 font-medium text-sm">Select a category to begin</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Category Sections -->
-                    <div id="category-sections">
-                        <!-- Loop Section -->
-                        <div id="loop-section" class="category-section hidden">
-                            <div class="glass-effect rounded-3xl premium-shadow-lg p-8 mb-6">
-                                <div class="flex items-center mb-8">
-                                    <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mr-4">
-                                        <i class="fas fa-sync-alt text-white text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-3xl font-bold text-blue-800">Loop Statements</h3>
-                                        <p class="text-blue-600">Repetitive execution patterns</p>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <button class="syntax-btn btn-premium category-blue p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="for">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-redo mr-3 text-xl"></i>
-                                                <span class="text-lg">For Loop</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                    <button class="syntax-btn btn-premium category-blue p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="for_in">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-arrow-right mr-3 text-xl"></i>
-                                                <span class="text-lg">For...In Loop</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                    <button class="syntax-btn btn-premium category-blue p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="while">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-clock mr-3 text-xl"></i>
-                                                <span class="text-lg">While Loop</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                    <button class="syntax-btn btn-premium category-blue p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="do_while">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-repeat mr-3 text-xl"></i>
-                                                <span class="text-lg">Do...While Loop</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Condition Section -->
-                        <div id="condition-section" class="category-section hidden">
-                            <div class="glass-effect rounded-3xl premium-shadow-lg p-8 mb-6">
-                                <div class="flex items-center mb-8">
-                                    <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-green-600 rounded-xl flex items-center justify-center mr-4">
-                                        <i class="fas fa-code-branch text-white text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-3xl font-bold text-green-800">Condition Statements</h3>
-                                        <p class="text-green-600">Decision-making constructs</p>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    <button class="syntax-btn btn-premium category-green p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="if">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-question mr-3 text-xl"></i>
-                                                <span class="text-lg">If Statement</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                    <button class="syntax-btn btn-premium category-green p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="if_else">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-route mr-3 text-xl"></i>
-                                                <span class="text-lg">If...Else</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                    <button class="syntax-btn btn-premium category-green p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="else_if">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-sitemap mr-3 text-xl"></i>
-                                                <span class="text-lg">Else If</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                    <button class="syntax-btn btn-premium category-green p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="nested_if">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-layer-group mr-3 text-xl"></i>
-                                                <span class="text-lg">Nested If...Else</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                    <button class="syntax-btn btn-premium category-green p-6 rounded-2xl font-semibold card-hover accent-border col-span-1 md:col-span-2 lg:col-span-1" data-syntax="switch">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-toggle-on mr-3 text-xl"></i>
-                                                <span class="text-lg">Switch Case</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Break Section -->
-                        <div id="break-section" class="category-section hidden">
-                            <div class="glass-effect rounded-3xl premium-shadow-lg p-8 mb-6">
-                                <div class="flex items-center mb-8">
-                                    <div class="w-12 h-12 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center mr-4">
-                                        <i class="fas fa-stop-circle text-white text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-3xl font-bold text-yellow-800">Break & Continue</h3>
-                                        <p class="text-yellow-600">Flow control statements</p>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <button class="syntax-btn btn-premium category-yellow p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="break">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-stop mr-3 text-xl"></i>
-                                                <span class="text-lg">Break Statement</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                    <button class="syntax-btn btn-premium category-yellow p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="continue">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-forward mr-3 text-xl"></i>
-                                                <span class="text-lg">Continue Statement</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Array Section -->
-                        <div id="array-section" class="category-section hidden">
-                            <div class="glass-effect rounded-3xl premium-shadow-lg p-8 mb-6">
-                                <div class="flex items-center mb-8">
-                                    <div class="w-12 h-12 bg-gradient-to-r from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mr-4">
-                                        <i class="fas fa-list text-white text-xl"></i>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-3xl font-bold text-purple-800">Arrays</h3>
-                                        <p class="text-purple-600">Data collection methods</p>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <button class="syntax-btn btn-premium category-purple p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="array_literal">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-brackets-curly mr-3 text-xl"></i>
-                                                <span class="text-lg">Array Literal</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                    <button class="syntax-btn btn-premium category-purple p-6 rounded-2xl font-semibold card-hover accent-border" data-syntax="array_constructor">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center">
-                                                <i class="fas fa-cog mr-3 text-xl"></i>
-                                                <span class="text-lg">Array Constructor</span>
-                                            </div>
-                                            <i class="fas fa-arrow-right text-sm opacity-60"></i>
-                                        </div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Premium Syntax Display Area -->
-                    <div id="syntax-display" class="hidden">
-                        <div class="syntax-card rounded-3xl premium-shadow-lg p-8 fade-in">
-                            <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 space-y-4 md:space-y-0">
-                                <div>
-                                    <h3 id="syntax-title" class="text-3xl font-bold text-gray-800 mb-2"></h3>
-                                    <p class="text-gray-600">Premium syntax visualization</p>
-                                </div>
-                                <div class="flex space-x-3">
-                                    <button id="copy-btn" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl">
-                                        <i class="fas fa-copy mr-2"></i>Copy Code
-                                    </button>
-                                    <button id="back-btn" class="px-6 py-3 btn-premium rounded-xl font-semibold">
-                                        <i class="fas fa-arrow-left mr-2"></i>Back
-                                    </button>
-                                </div>
-                            </div>
-                            <div id="syntax-content" class="code-block text-green-400 p-8 rounded-2xl code-font text-sm md:text-base overflow-x-auto premium-shadow mb-6">
-                                <!-- Syntax content will be inserted here -->
-                            </div>
-                            <div id="syntax-description" class="glass-effect p-6 rounded-2xl text-gray-700 leading-relaxed">
-                                <!-- Description will be inserted here -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
     <script>
-        // Loader functionality
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loader').style.display = 'none';
-                    document.getElementById('main-content').style.opacity = '1';
-                }, 500);
-            }, 2000);
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('content');
+
+        sidebar.addEventListener('click', (e) => {
+            const targetButton = e.target.closest('button');
+            if (!targetButton) return;
+
+            const targetId = targetButton.dataset.target;
+            const targetSection = document.getElementById(targetId);
+
+            if (targetSection) {
+                // Remove 'active' class from all buttons and syntax blocks
+                document.querySelectorAll('.menu-group button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.syntax-block').forEach(block => block.classList.remove('active'));
+                
+                // Add 'active' class to the clicked button and its corresponding syntax block
+                targetButton.classList.add('active');
+                targetSection.classList.add('active');
+            }
         });
-
-        // Mobile menu functionality
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeMenuBtn = document.getElementById('close-menu');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.add('open');
-        });
-
-        closeMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-        });
-
-        // Main menu functionality
-        const mainMenuBtns
+    </script>
+</body>
+</html>
